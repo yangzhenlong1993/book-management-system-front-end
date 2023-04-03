@@ -5,12 +5,13 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import Layout from '@/layout'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
 
@@ -33,8 +34,20 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           await store.dispatch('user/getInfo')
-
-          next()
+          //router exchange
+          let myRoutes = myFilterAsyncRoutes(store.getters.menuList);
+          //404
+          myRoutes.push({
+            path: '*',
+            redirect: '/404',
+            hidden: true
+          });
+          //dynamically add routers
+          router.addRoutes(myRoutes);
+          //store in the global variable
+          global.myRoutes = myRoutes;
+          //avoid the problem of the empty page when refreshing the page
+          next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
@@ -62,3 +75,19 @@ router.afterEach(() => {
   // finish progress bar
   NProgress.done()
 })
+
+function myFilterAsyncRoutes(menuList) {
+  menuList.filter(menu => {
+    if (menu.component === 'Layout') {
+      menu.component = Layout;
+      console.log(menu.component);
+    } else {
+      menu.component = require(`@/views/${menu.component}.vue`).default
+    }
+    if (menu.children && menu.children.length) {
+      menu.children = myFilterAsyncRoutes(menu.children)
+    }
+    return true
+  })
+  return menuList;
+}

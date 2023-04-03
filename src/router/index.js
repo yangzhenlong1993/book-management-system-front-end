@@ -51,117 +51,64 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: 'Home', icon: 'dashboard', affix:true }
     }]
   },
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
+  // {
+  //   path: '/sys',
+  //   component: Layout,
+  //   redirect: '/sys/user',
+  //   name: 'sysManage',
+  //   meta: { title: 'System Manage', icon: 'user-gear' },
+  //   children: [
+  //     {
+  //       path: 'user',
+  //       name: 'User',
+  //       component: () => import('@/views/sys/user'),
+  //       meta: { title: 'User Manage', icon: 'user' }
+  //     },
+  //     {
+  //       path: 'role',
+  //       name: 'Role',
+  //       component: () => import('@/views/sys/role'),
+  //       meta: { title: 'Role Manage', icon: 'role' }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
+  // {
+  //   path: '/test',
+  //   component: Layout,
+  //   redirect: '/test/test1',
+  //   name: 'Test',
+  //   meta: { title: 'Test Modules', icon: 'test' },
+  //   children: [
+  //     {
+  //       path: 'test1',
+  //       name: 'Test1',
+  //       component: () => import('@/views/test/test1'),
+  //       meta: { title: 'Feature Module 1', icon: 'feature' }
+  //     },
+  //     {
+  //       path: 'test2',
+  //       name: 'Test2',
+  //       component: () => import('@/views/test/test2'),
+  //       meta: { title: 'Feature Module 2', icon: 'feature' }
+  //     },
+  //     {
+  //       path: 'test3',
+  //       name: 'Test3',
+  //       component: () => import('@/views/test/test3'),
+  //       meta: { title: 'Feature Module 3', icon: 'feature' }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
+  // // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
 
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  
 ]
 
 const createRouter = () => new Router({

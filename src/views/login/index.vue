@@ -43,10 +43,10 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
-      </div>
+      </div> -->
 
     </el-form>
   </div>
@@ -182,14 +182,21 @@ $light_gray:#eee;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
+  background-image: url(../../assets/DHS.jpg);
+  background-size: 100%;
 
+  display: flex;
+  align-items: center;
   .login-form {
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 35px 50px 10px;
     margin: 0 auto;
     overflow: hidden;
+    background-color: #2d3a4b;
+    border-radius: 8px;
+    opacity: 0.9;
   }
 
   .tips {
