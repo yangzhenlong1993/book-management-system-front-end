@@ -32,16 +32,18 @@
                 </el-table-column>
                 <el-table-column prop="publisher" label="publisher" width="180">
                 </el-table-column>
-                <!-- <el-table-column prop="inStock" label="in stock">
+                <el-table-column prop="inStock" label="in stock">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.inStock == 1">in stock</el-tag>
+                        <el-tag v-if="scope.row.inStock == 0">in stock</el-tag>
                         <el-tag v-else type="danger">out of stock</el-tag>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
                 <el-table-column prop="description" label="description">
                 </el-table-column>
                 <el-table-column label="operation" width="180">
                     <template slot-scope="scope">
+                        <el-button type="info" icon="el-icon-s-order" circle @click="openHistoryDialog(scope.row.id)"
+                            size="mini"></el-button>
                         <el-button type="primary" icon="el-icon-edit" circle @click="openFormDialog(scope.row.id)"
                             size="mini"></el-button>
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
@@ -55,8 +57,8 @@
             :current-page="searchModel.pageNo" :page-sizes="[5, 10, 15, 20]" :page-size="searchModel.pageSize"
             layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <!--dialog-->
-        <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
+        <!--book info dialog-->
+        <el-dialog @close="clearInfoForm" :title="title" :visible.sync="infoDialogFormVisible">
             <el-form :model="bookForm" ref="bookFormRef" :rules="rules">
                 <el-form-item label="book name" :label-width="formLabelWidth" prop="bookName">
                     <el-input v-model="bookForm.bookName" autocomplete="off"></el-input>
@@ -86,9 +88,24 @@
                 </el-form-item> -->
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">cancel</el-button>
+                <el-button @click="infoDialogFormVisible = false">cancel</el-button>
                 <el-button type="primary" @click="saveBook">confirm</el-button>
             </div>
+        </el-dialog>
+        <!--history dialog-->
+        <el-dialog @close="clearHistoryForm" title="Borrowing History" :visible.sync="historyDialogFormVisible" width="1500px">
+            <el-table :data="bookHistoryList" style="width: 100%" height="250" border>
+                <el-table-column prop="book.bookName" label="Book Name" width="180">
+                </el-table-column>
+                <el-table-column prop="borrowDate" label="Borrow Date" width="180">
+                </el-table-column>
+                <el-table-column prop="returnDate" label="Return Date" width="180">
+                </el-table-column>
+                <el-table-column prop="staff.username" label="Staff Name" width="180">
+                </el-table-column>
+                <el-table-column prop="borrower.username" label="Borrower Name">
+                </el-table-column>
+            </el-table>
         </el-dialog>
     </div>
 </template>
@@ -113,7 +130,9 @@ export default {
             bookForm: {
 
             },
-            dialogFormVisible: false,
+            bookHistoryList: [],
+            infoDialogFormVisible: false,
+            historyDialogFormVisible: false,
             title: "",
             total: 0,
             searchModel: {
@@ -150,7 +169,7 @@ export default {
                             type: 'success'
                         });
                         //close dialog form
-                        this.dialogFormVisible = false;
+                        this.infoDialogFormVisible = false;
                         //refresh the data list
                         this.getBookList();
                     });
@@ -170,9 +189,18 @@ export default {
                 //select the selected user info by user id
                 bookManageApi.getBookById(id).then(response => {
                     this.bookForm = response.data;
+                    console.log(this.bookForm);
                 });
             }
-            this.dialogFormVisible = true;
+            this.infoDialogFormVisible = true;
+        },
+        openHistoryDialog(id) {
+            this.title = 'borrowing history';
+            bookManageApi.getBorrowHistoryById(id).then(response => {
+                console.log(response.data);
+                this.bookHistoryList = response.data;
+            });
+            this.historyDialogFormVisible = true;
         },
         handleSizeChange(pageSize) {
             this.searchModel.pageSize = pageSize;
@@ -188,10 +216,13 @@ export default {
                 this.total = resp.data.total;
             });
         },
-        clearForm() {
+        clearInfoForm() {
             this.bookForm = {
             };
             this.$refs.bookFormRef.clearValidate();
+        },
+        clearHistoryForm() {
+            this.bookHistoryList = [];
         },
         deleteBook(book) {
             //confirmation message box

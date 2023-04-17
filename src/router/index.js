@@ -51,9 +51,23 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Home', icon: 'dashboard', affix:true }
+      meta: { title: 'Home', icon: 'dashboard', affix: true }
     }]
   },
+
+  {
+    path: '/info',
+    component: Layout,
+    redirect: '/info/userInfo',
+    name: 'userInfo',
+    children: [{
+      path: 'userInfo',
+      name: 'User Info',
+      component: () => import('@/views/info/userInfo'),
+      meta: { title: 'User Info', icon: 'user' },
+      hidden: true
+    }]
+  }
 
   // {
   //   path: '/sys',
@@ -108,7 +122,7 @@ export const constantRoutes = [
   // // 404 page must be placed at the end !!!
   // { path: '*', redirect: '/404', hidden: true }
 
-  
+
 ]
 
 const createRouter = () => new Router({

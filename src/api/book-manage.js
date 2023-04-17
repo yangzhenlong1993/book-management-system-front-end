@@ -27,6 +27,12 @@ export default {
       method: 'get'
     });
   },
+  getBorrowHistoryById(id){
+    return request({
+      url: `/borrowingArchives/${id}`,
+      method: 'get'
+    });
+  },
   saveBook(book) {
     if (book.id == null && book.id == undefined) {
       return this.addBook(book);
